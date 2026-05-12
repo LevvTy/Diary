@@ -1,41 +1,63 @@
-.diary-list h2 {
-  font-size: 20px;
+.diary-list-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.diary-list-header h2 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-style: italic;
   color: var(--text-h);
-  margin: 0 0 20px;
-  text-align: left;
+  margin: 0;
+}
+
+.entry-count {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 10px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  border-radius: 20px;
+  border: 1px solid var(--accent-border);
 }
 
 .entries-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
+  gap: 18px;
 }
 
 .empty-state {
   text-align: center;
-  padding: 60px 20px;
-  color: var(--text);
+  padding: 64px 20px;
+  color: var(--text-light);
   border: 2px dashed var(--border);
-  border-radius: 16px;
+  border-radius: 20px;
+  background: var(--card-bg);
 }
 
 .empty-icon {
-  font-size: 48px;
+  font-size: 52px;
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
+  opacity: 0.7;
 }
 
 .empty-state p {
+  font-family: var(--serif);
+  font-style: italic;
   font-size: 16px;
 }
 
 .list-status {
   text-align: center;
-  padding: 40px 20px;
-  color: var(--text);
-  font-size: 15px;
+  padding: 48px 20px;
+  color: var(--text-light);
+  font-style: italic;
+  font-family: var(--serif);
+  font-size: 16px;
 }
 
-.list-status.error {
-  color: #dc2626;
-}
+.list-status.error { color: #dc2626; font-style: normal; }

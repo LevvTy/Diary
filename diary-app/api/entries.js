@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     const { data, error } = await supabase
       .from('entries')
       .select('*')
-      .order('created_at', { ascending: false })
+      .order('entry_date', { ascending: false })
 
     if (error) {
       console.error('Supabase GET error:', error)
@@ -38,7 +38,7 @@ export default async function handler(req, res) {
   // POST /api/entries
   if (req.method === 'POST') {
     const body = await parseBody(req)
-    const { title, content, emotion } = body
+    const { title, content, emotion, entry_date } = body
 
     if (!content?.trim()) {
       return res.status(400).json({ error: 'Nội dung không được để trống' })
@@ -50,6 +50,7 @@ export default async function handler(req, res) {
         title: title?.trim() || 'Không có tiêu đề',
         content: content.trim(),
         emotion: emotion ?? null,
+        entry_date: entry_date ?? new Date().toISOString(),
       }])
       .select()
       .single()

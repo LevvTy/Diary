@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { addEntry } from '../lib/api'
+import { useToast } from '../lib/toast'
 import './DiaryForm.css'
 
 const EMOTIONS = [
@@ -13,11 +14,20 @@ const EMOTIONS = [
   { emoji: '🤩', label: 'Phấn khích' },
 ]
 
+// Format datetime-local value từ Date
+function toLocalDatetimeValue(date) {
+  const pad = n => String(n).padStart(2, '0')
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
 export default function DiaryForm({ onSaved }) {
+  const toast = useToast()
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [emotion, setEmotion] = useState(null)
-  const [status, setStatus] = useState('idle') // idle | saving | success | error
+  const [date, setDate] = useState(() => toLocalDatetimeValue(new Date()).slice(0, 10))
+  const [time, setTime] = useState(() => toLocalDatetimeValue(new Date()).slice(11, 16))
+  const [status, setStatus] = useState('idle')
   const [errorMsg, setErrorMsg] = useState('')
 
   const handleSubmit = async (e) => {
@@ -25,11 +35,10 @@ export default function DiaryForm({ onSaved }) {
     if (!content.trim() || status === 'saving') return
 
     const entry = {
-      id: Date.now(),
       title: title.trim() || 'Không có tiêu đề',
       content: content.trim(),
       emotion,
-      createdAt: new Date().toISOString(),
+      entry_date: `${date}T${time}:00`,
     }
 
     setStatus('saving')
@@ -40,18 +49,21 @@ export default function DiaryForm({ onSaved }) {
       setTitle('')
       setContent('')
       setEmotion(null)
+      setDate(toLocalDatetimeValue(new Date()).slice(0, 10))
+      setTime(toLocalDatetimeValue(new Date()).slice(11, 16))
       setStatus('success')
+      toast('Đã lưu nhật ký thành công 🎉')
       onSaved()
-      setTimeout(() => setStatus('idle'), 3000)
     } catch (err) {
       setStatus('error')
       setErrorMsg(err.message)
+      toast(err.message || 'Có lỗi xảy ra', 'error')
     }
   }
 
   return (
     <form className="diary-form" onSubmit={handleSubmit}>
-      <h2>✏️ Viết nhật ký mới</h2>
+      <h2 className="form-title">✍️ Viết nhật ký mới</h2>
 
       <div className="form-group">
         <label htmlFor="diary-title">Tiêu đề</label>
@@ -63,6 +75,30 @@ export default function DiaryForm({ onSaved }) {
           onChange={e => setTitle(e.target.value)}
           disabled={status === 'saving'}
         />
+      </div>
+
+      <div className="form-group">
+        <label>Ngày &amp; giờ</label>
+        <div className="datetime-row">
+          <div className="datetime-field">
+            <span className="datetime-icon">📅</span>
+            <input
+              type="date"
+              value={date}
+              onChange={e => setDate(e.target.value)}
+              disabled={status === 'saving'}
+            />
+          </div>
+          <div className="datetime-field">
+            <span className="datetime-icon">🕐</span>
+            <input
+              type="time"
+              value={time}
+              onChange={e => setTime(e.target.value)}
+              disabled={status === 'saving'}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="form-group">
@@ -104,12 +140,6 @@ export default function DiaryForm({ onSaved }) {
       {status === 'error' && (
         <div className="form-message error" role="alert">
           ❌ {errorMsg || 'Có lỗi xảy ra, vui lòng thử lại.'}
-        </div>
-      )}
-
-      {status === 'success' && (
-        <div className="form-message success" role="status">
-          ✅ Đã lưu nhật ký lên GitHub thành công!
         </div>
       )}
 

@@ -17,7 +17,7 @@ app.get('/api/entries', async (req, res) => {
   const { data, error } = await supabase
     .from('entries')
     .select('*')
-    .order('created_at', { ascending: false })
+    .order('entry_date', { ascending: false })
 
   if (error) return res.status(500).json({ error: error.message })
   res.json(data)
@@ -25,7 +25,7 @@ app.get('/api/entries', async (req, res) => {
 
 // POST /api/entries
 app.post('/api/entries', async (req, res) => {
-  const { title, content, emotion } = req.body
+  const { title, content, emotion, entry_date } = req.body
   if (!content?.trim()) return res.status(400).json({ error: 'Nội dung không được để trống' })
 
   const { data, error } = await supabase
@@ -34,6 +34,7 @@ app.post('/api/entries', async (req, res) => {
       title: title?.trim() || 'Không có tiêu đề',
       content: content.trim(),
       emotion: emotion ?? null,
+      entry_date: entry_date ?? new Date().toISOString(),
     }])
     .select()
     .single()
