@@ -1,0 +1,41 @@
+.diary-list h2 {
+  font-size: 20px;
+  color: var(--text-h);
+  margin: 0 0 20px;
+  text-align: left;
+}
+
+.entries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text);
+  border: 2px dashed var(--border);
+  border-radius: 16px;
+}
+
+.empty-icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 16px;
+}
+
+.list-status {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.list-status.error {
+  color: #dc2626;
+}
