@@ -17,7 +17,7 @@ app.get('/api/entries', async (req, res) => {
   const { data, error } = await supabase
     .from('entries')
     .select('*')
-    .order('entry_date', { ascending: false })
+    .order('entry_date', { ascending: true })
 
   if (error) return res.status(500).json({ error: error.message })
   res.json(data)
@@ -52,6 +52,16 @@ app.delete('/api/entries/:id', async (req, res) => {
 
   if (error) return res.status(500).json({ error: error.message })
   res.json({ success: true })
+})
+
+// POST /api/visits
+app.post('/api/visits', async (req, res) => {
+  const { error } = await supabase
+    .from('visits')
+    .insert([{ visited_at: new Date().toISOString() }])
+
+  if (error) return res.status(500).json({ error: error.message })
+  res.status(201).json({ success: true })
 })
 
 app.listen(3001, () => console.log('API server running on http://localhost:3001'))

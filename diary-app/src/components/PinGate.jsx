@@ -42,6 +42,13 @@ export default function PinGate({ children }) {
   const submit = (entered = pin.join('')) => {
     if (entered === CORRECT_PIN) {
       sessionStorage.setItem(SESSION_KEY, '1')
+      // Ghi lượt truy cập vào DB theo UTC+7
+      const vnTime = new Date(Date.now() + 7 * 60 * 60 * 1000).toISOString().replace('Z', '+07:00')
+      fetch('/api/visits', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ visited_at: vnTime }),
+      }).catch(() => {})
       setUnlocked(true)
     } else {
       setError(true)

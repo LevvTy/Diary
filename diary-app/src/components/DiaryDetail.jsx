@@ -1,22 +1,14 @@
 import { useState } from 'react'
 import EntryDetail from './EntryDetail'
+import { getTimeStr, formatFullDate, getDateKey } from '../lib/time'
 import './DiaryDetail.css'
 
 function formatTime(isoString) {
-  // Lấy phần giờ:phút trực tiếp từ string tránh lệch timezone
-  const timePart = isoString.slice(11, 16)
-  if (timePart) return timePart
-  return new Date(isoString).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+  return getTimeStr(isoString)
 }
 
-function formatFullDate(isoString) {
-  const [y, m, d] = isoString.slice(0, 10).split('-').map(Number)
-  return new Date(y, m - 1, d).toLocaleDateString('vi-VN', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
+function formatFullDateStr(isoString) {
+  return formatFullDate(getDateKey(isoString))
 }
 
 export default function DiaryDetail({ dateLabel, entries, onDelete, onClose }) {
@@ -35,7 +27,7 @@ export default function DiaryDetail({ dateLabel, entries, onDelete, onClose }) {
         <span className="detail-day-icon">📅</span>
         <div>
           <h2 className="detail-day-title">{dateLabel}</h2>
-          <p className="detail-day-sub">{formatFullDate(dateStr)}</p>
+          <p className="detail-day-sub">{formatFullDateStr(dateStr)}</p>
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { addEntry } from '../lib/api'
 import { useToast } from '../lib/toast'
+import { toInputDatetimeValue } from '../lib/time'
 import './DiaryForm.css'
 
 const EMOTIONS = [
@@ -16,8 +17,7 @@ const EMOTIONS = [
 
 // Format datetime-local value từ Date
 function toLocalDatetimeValue(date) {
-  const pad = n => String(n).padStart(2, '0')
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`
+  return toInputDatetimeValue(date)
 }
 
 export default function DiaryForm({ onSaved }) {

@@ -26,7 +26,7 @@ export default async function handler(req, res) {
     const { data, error } = await supabase
       .from('entries')
       .select('*')
-      .order('entry_date', { ascending: false })
+      .order('entry_date', { ascending: true })
 
     if (error) {
       console.error('Supabase GET error:', error)

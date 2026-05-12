@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { fetchEntries, deleteEntry } from '../lib/api'
 import { useToast } from '../lib/toast'
+import { getDateKey, formatDateLabel } from '../lib/time'
 import DiaryCard from './DiaryCard'
 import DiaryDetail from './DiaryDetail'
 import Modal from './Modal'
@@ -10,9 +11,7 @@ import './DiaryList.css'
 function groupByDate(entries) {
   const map = {}
   entries.forEach(entry => {
-    const dateStr = entry.entry_date || entry.created_at
-    // Lấy phần ngày trực tiếp từ string (YYYY-MM-DD) tránh lệch timezone
-    const key = dateStr.slice(0, 10)
+    const key = getDateKey(entry.entry_date || entry.created_at)
     if (!map[key]) map[key] = []
     map[key].push(entry)
   })
@@ -24,18 +23,8 @@ function groupByDate(entries) {
     })
   )
   return Object.entries(map)
-    .sort(([a], [b]) => b.localeCompare(a))
+    .sort(([a], [b]) => a.localeCompare(b))
     .map(([key, entries]) => ({ key, entries }))
-}
-
-function formatDateLabel(key) {
-  // Parse trực tiếp từ YYYY-MM-DD tránh lệch timezone
-  const [y, m, d] = key.split('-').map(Number)
-  return new Date(y, m - 1, d).toLocaleDateString('vi-VN', {
-    day: 'numeric',
-    month: 'long',
-    year: 'numeric',
-  })
 }
 
 export default function DiaryList({ refreshKey }) {

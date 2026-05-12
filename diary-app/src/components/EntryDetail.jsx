@@ -1,11 +1,10 @@
 import { useState } from 'react'
 import ConfirmDialog from './ConfirmDialog'
+import { getTimeStr } from '../lib/time'
 import './EntryDetail.css'
 
 function formatTime(isoString) {
-  const timePart = isoString.slice(11, 16)
-  if (timePart) return timePart
-  return new Date(isoString).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' })
+  return getTimeStr(isoString)
 }
 
 export default function EntryDetail({ entry, onDelete, onClose }) {
