@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { addEntry } from '../lib/github'
+import { addEntry } from '../lib/api'
 import './DiaryForm.css'
 
 const EMOTIONS = [

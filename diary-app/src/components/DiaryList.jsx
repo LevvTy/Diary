@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { fetchEntries, deleteEntry } from '../lib/github'
+import { fetchEntries, deleteEntry } from '../lib/api'
 import DiaryCard from './DiaryCard'
 import './DiaryList.css'
 
