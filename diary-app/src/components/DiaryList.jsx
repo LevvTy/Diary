@@ -12,7 +12,7 @@ export default function DiaryList({ refreshKey }) {
     setLoading(true)
     setError('')
     fetchEntries()
-      .then(({ entries }) => setEntries(entries))
+      .then(data => setEntries(data))
       .catch(err => setError(err.message))
       .finally(() => setLoading(false))
   }, [refreshKey])
